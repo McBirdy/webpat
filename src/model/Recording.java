@@ -44,15 +44,4 @@ public class Recording {
 				+ ", reach=" + reach + ", netFail=" + netFail + ", hipatFail="
 				+ hipatFail + ", cesiumFail=" + cesiumFail + "]";
 	}
-	
-	public static void main(String[] args) {
-		Recording x = new Recording();
-		System.out.println(x);
-	}
-
-
-	
-	
-	
-
 }

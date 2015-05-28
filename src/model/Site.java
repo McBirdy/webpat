@@ -18,7 +18,6 @@ public class Site {
 		this.lastActive = new Date();
 		this.status = 1;
 		this.recordings.add(new Recording());
-		
 	}
 	
 	public Site(String location, String ipAddress, String comment) {
@@ -27,15 +26,8 @@ public class Site {
 		this.comment = comment;
 	}
 	
-	public static void main(String[] args) {
-		Site site = new Site("test1", "123.3", "comment");
-		System.out.println(site.location);
-	
-		site.recordings.add(new Recording());
-		
-		for (Recording y : site.recordings) {
-			System.out.println(y);
-		}
-		
+	public Recording getLastRecording() {
+		/* Returns the last recording stored in the recordings Array */
+		return recordings.get(recordings.size() - 1);
 	}
 }
