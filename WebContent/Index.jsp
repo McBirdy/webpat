@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ page import="data.FileHandler" %>
+    <%@ page import="model.Site, model.Recording, java.util.ArrayList" %>
     
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,7 +13,8 @@
 <body>
     
     <%!
-    FileHandler fileHandler = new FileHandler();
+    ArrayList<Site> list = new ArrayList<Site>();
+    list.add(new Site());
     %>
 
     <%
@@ -22,8 +23,7 @@
     %>
 
     <%
-    	fileHandler.readFile();
-    	fileHandler.checkForComment();
+    	
     %>
     <div id="container">
     	<div id="header">
@@ -42,7 +42,7 @@
         
     	<div id="mainContent">
     		<%
-    		for(int i = 0; i < fileHandler.ntpqList.size(); i++) {
+    		for(Site site: list) {
     		%>
     		<table width="80%" border="0" cellspacing="0" cellpadding="0" class="center">                
   				<tr>
