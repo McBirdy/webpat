@@ -14,16 +14,17 @@
     
     <%!
     ArrayList<Site> list = new ArrayList<Site>();
-    list.add(new Site());
+    
+ 
     %>
 
     <%
        // Set refresh, autoload time as 5 seconds
-       response.setIntHeader("Refresh", 5);
+       //response.setIntHeader("Refresh", 5);
     %>
 
     <%
-    	
+    	list.add(new Site());
     %>
     <div id="container">
     	<div id="header">
@@ -47,7 +48,8 @@
     		<table width="80%" border="0" cellspacing="0" cellpadding="0" class="center">                
   				<tr>
   					<%
-					if(fileHandler.ntpqList.get(i).getStatus().equals("red")){
+  					
+					if(site.getLastRecording().reach != 45){
 					%>
 						<td width="20" height="20" valign="top" bgcolor="#FF0000" id="colour"> </td>
 					<%
@@ -58,21 +60,21 @@
   					}
   					%>
   					<td width="20" height="20" valign="top"> </td>
-    				<td width="15%" height="20" valign="top"><%= fileHandler.ntpqList.get(i).getRemote() %></td>
+    				<td width="15%" height="20" valign="top"><%= site.location %></td>
     				<%
-					if(fileHandler.ntpqList.get(i).getWhen() == -1){
+					if(site.getLastRecording().reach != 45){
 					%>
 					<td width="15%" height="20" valign="top"> - </td>
 					<%
   					}else{
   					%>
-    				<td width="15%" height="20" valign="top"><%= fileHandler.ntpqList.get(i).getWhen() %></td>
+    				<td width="15%" height="20" valign="top"><%= site.getLastRecording().timestamp %></td>
     				<%
   					}
   					%>
-    				<td width="15%" height="20" valign="top"><%= fileHandler.ntpqList.get(i).getOffset() %></td>
-    				<td width="15%" height="20" valign="top"><%= fileHandler.ntpqList.get(i).getJitter() %></td>
-    				<td width="15%" height="20" valign="top"><%= fileHandler.ntpqList.get(i).getComment() %></td>
+    				<td width="15%" height="20" valign="top"><%= site.getLastRecording().offset %></td>
+    				<td width="15%" height="20" valign="top"><%= site.getLastRecording().jitter %></td>
+    				<td width="15%" height="20" valign="top"><%= site.getLastRecording().lastUpdate %></td>
   				</tr>
     		</table>
             

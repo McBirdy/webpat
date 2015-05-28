@@ -15,6 +15,7 @@ public class Create {
 		for (Site site : list) {
 			System.out.printf("site: %s comment: %s\n", site.location, site.comment);
 			System.out.println(site.getLastRecording());
+			System.out.println(site.getLastRecording().reach);
 			
 		}
 	}
