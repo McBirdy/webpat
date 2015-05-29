@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,62 +12,45 @@ import model.Site;
 
 public class FetchViaNtpq implements FetchData {
 	private BufferedReader inReader;
-	@Override
-	public Recording getLatestRecording(Site originSite) {
-		
-		return null;
-	}
 	
 	@Override
 	public ArrayList<Recording> getAllRecordings(Site originSite) {
 		return null;
 	}
 	
-	public void FileHandler() {
-		try {
-			inReader = new BufferedReader(new FileReader("project/ntpq_output.txt"));
-		} catch(IOException e) {
-			System.out.println(e);
-		}
+	private void openFile() throws FileNotFoundException{
+		String fileLocation = "project/ntpq_output.txt";
+		inReader = new BufferedReader(new FileReader(fileLocation));	// Will throw FileNotFoundException
 	}
 	
-	public void closeFile() {
-		try {
-			inReader.close();
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public Recording readNtpqFile(Site site) throws IOException{
+	/**
+	 * @param site The site from where the recording should come
+	 * @throws IOException if no result is found in text file
+	 * @return Recording Recording object with data from ntpq output
+	 */
+	public Recording getLatestRecording(Site site) throws FileNotFoundException, IOException{
+		openFile();
 		String currentLine;
 		
-		try{
-			while((currentLine = inReader.readLine()) != null){
-				String[] tokens = currentLine.split("\\s+");
-				
-				String ipAddress = tokens[0];
+		while((currentLine = inReader.readLine()) != null){
+			String[] tokens = currentLine.split("\\s+");
+			
+			String ipAddress = tokens[0];
+			if(site.ipAddress.equals(ipAddress)){	// If the site ipAddress is in the ntpq file
 				int lastUpdate = Integer.parseInt(tokens[4]);
 				int reach = convertLastUpdate(tokens[6]);
 				double offset = Double.parseDouble(tokens[7]);
 				double jitter = Double.parseDouble(tokens[8]);
 				
-				if(site.ipAddress.equals(ipAddress)){
-					return new Recording(
-							new Date(),
-							offset,
-							lastUpdate,
-							jitter,
-							reach,
-							false,
-							false,
-							false);
-				}				
+				inReader.close();
+				
+				return new Recording(new Date(), offset, lastUpdate, jitter,
+						// Todo: Change the false statements to the actual tests
+						reach, false, false, false);
 			}
-		}catch(IOException e) {
-			throw new IOException();
 		}
-		throw new IOException();
+		inReader.close();
+		throw new IOException();	// The file did not contain the ip_address of the site
 	}
 	
 	/**Makes sure the reach variable is converted to seconds in a proper way.
@@ -78,7 +62,7 @@ public class FetchViaNtpq implements FetchData {
 	 * @param reach The string that is to be converted
 	 * @return int Value converted to seconds
 	 */
-	public static int convertLastUpdate(String reach) {
+	private static int convertLastUpdate(String reach) {
 		try{
 			return Integer.parseInt(reach);	// If it is not a valid int an error is called
 		}catch(NumberFormatException e) {
@@ -95,22 +79,4 @@ public class FetchViaNtpq implements FetchData {
 		
 		
 	}
-	
-	public static void main(String[] args) {
-		FetchViaNtpq x = new FetchViaNtpq();
-		Site site = new Site("Mag", "17.72.148.52", "coment");
-		x.FileHandler();
-		try{
-			Recording recording = x.readNtpqFile(site);
-			System.out.println(recording);
-		}catch(IOException e) {
-			System.out.println(e);
-		}
-		
-		System.out.println(convertLastUpdate("23h"));
-		System.out.println(convertLastUpdate("12"));
-		System.out.println(convertLastUpdate("-"));
-		
-	}
-
 }
