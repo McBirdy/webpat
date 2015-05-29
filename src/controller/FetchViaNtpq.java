@@ -2,25 +2,21 @@ package controller;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 
 import model.Recording;
 import model.Site;
+import support.PropertiesLoad;
 
 public class FetchViaNtpq implements FetchData {
-	private BufferedReader inReader;
 	
 	@Override
 	public ArrayList<Recording> getAllRecordings(Site originSite) {
 		return null;
-	}
-	
-	private void openFile() throws FileNotFoundException{
-		String fileLocation = "project/ntpq_output.txt";
-		inReader = new BufferedReader(new FileReader(fileLocation));	// Will throw FileNotFoundException
 	}
 	
 	/**
@@ -29,27 +25,31 @@ public class FetchViaNtpq implements FetchData {
 	 * @return Recording Recording object with data from ntpq output
 	 */
 	public Recording getLatestRecording(Site site) throws FileNotFoundException, IOException{
-		openFile();
-		String currentLine;
 		
-		while((currentLine = inReader.readLine()) != null){
-			String[] tokens = currentLine.split("\\s+");
+		Properties prop = PropertiesLoad.loadProperties();
+		String currentLine;
+		try ( @SuppressWarnings("resource")
+		BufferedReader inReader = new BufferedReader(new InputStreamReader(
+				getClass().getClassLoader().getResourceAsStream(prop.getProperty("ntpqFileName"))))){
 			
-			String ipAddress = tokens[0];
-			if(site.ipAddress.equals(ipAddress)){	// If the site ipAddress is in the ntpq file
-				int lastUpdate = Integer.parseInt(tokens[4]);
-				int reach = convertLastUpdate(tokens[6]);
-				double offset = Double.parseDouble(tokens[7]);
-				double jitter = Double.parseDouble(tokens[8]);
+			while((currentLine = inReader.readLine()) != null){
+				String[] tokens = currentLine.split("\\s+");
 				
-				inReader.close();
-				
-				return new Recording(new Date(), offset, lastUpdate, jitter,
-						// Todo: Change the false statements to the actual tests
-						reach, false, false, false);
-			}
-		}
-		inReader.close();
+				String ipAddress = tokens[0];
+				if(site.ipAddress.equals(ipAddress)){	// If the site ipAddress is in the ntpq file
+					int lastUpdate = Integer.parseInt(tokens[4]);
+					int reach = convertLastUpdate(tokens[6]);
+					double offset = Double.parseDouble(tokens[7]);
+					double jitter = Double.parseDouble(tokens[8]);
+					
+					return new Recording(new Date(), offset, lastUpdate, jitter,
+							// Todo: Change the false statements to the actual tests
+							reach, false, false, false);
+				}
+			} 
+		} catch(NullPointerException e) {
+			System.out.printf("Ntpq file: %s not found", prop.getProperty("ntpqFileName"));
+		} 
 		throw new IOException();	// The file did not contain the ip_address of the site
 	}
 	
