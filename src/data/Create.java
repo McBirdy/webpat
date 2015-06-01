@@ -1,16 +1,15 @@
 package data;
 import java.util.ArrayList;
 
+import controller.SiteBuilder;
 import model.*;
 
 public class Create {
 	
 	
 	public static void main(String[] args) {
-		ArrayList<Site> list = new ArrayList<Site>();
-		
-		list.add(new Site("Test", "176.31.45.66", "comment"));
-		list.get(0).update();
+		ArrayList<Site> siteList = SiteBuilder.getSites();
+		//SiteBuilder.updateSites(siteList);
 		
 		
 		
@@ -18,8 +17,9 @@ public class Create {
 		
 		
 		
-		for (Site site : list) {
-			System.out.printf("site: %s comment: %s\n", site.location, site.comment);
+		for (Site site : siteList) {
+			site.update();
+			System.out.printf("site: %s ipAddress: %s comment: %s\n", site.location, site.ipAddress, site.comment);
 			System.out.println(site.getLastRecording());
 			
 		}
