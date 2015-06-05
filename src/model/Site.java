@@ -1,7 +1,11 @@
 package model;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+
+import controller.FetchViaNtpq;
 
 public class Site {
 	public final String location;
@@ -29,5 +33,19 @@ public class Site {
 	public Recording getLastRecording() {
 		/* Returns the last recording stored in the recordings Array */
 		return recordings.get(recordings.size() - 1);
+	}
+	
+	public void update() {
+		FetchViaNtpq fetcher = new FetchViaNtpq(); 
+		try {
+			Recording recording = fetcher.getLatestRecording(this);
+			recordings.add(recording);
+		} catch (FileNotFoundException e) {
+			System.out.printf("%s\n", e.getMessage());
+			System.exit(1);
+		} catch (IOException e) {
+			System.out.printf("Ip Address: %s not found in ntpq output\n", this.ipAddress);
+			recordings.add(null);
+		} 
 	}
 }
