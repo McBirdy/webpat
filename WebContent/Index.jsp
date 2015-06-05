@@ -7,84 +7,68 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Ntpq Status</title>
-    <link href="style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="bootstrap-3.3.4-dist/css/bootstrap.min.css">
+ 	<script src="bootstrap-3.3.4-dist/js/bootstrap.min.js"></script>
 </head>
+<%! ArrayList<Site> list = new ArrayList<Site>(); %>
+<%     // Set refresh, autoload time as 5 seconds
+       //response.setIntHeader("Refresh", 5); %>
+<%  list.add(new Site()); %>
 
 <body>
-    
-    <%!
-    ArrayList<Site> list = new ArrayList<Site>();
-    
- 
-    %>
-
-    <%
-       // Set refresh, autoload time as 5 seconds
-       //response.setIntHeader("Refresh", 5);
-    %>
-
-    <%
-    	list.add(new Site());
-    %>
-    <div id="container">
-    	<div id="header">
-    		<table width="80%" border="0" cellspacing="0" cellpadding="0" class="center">
-  				<tr>
-  					<td width="20" height="20" valign="top" bgcolor="#00CC00" id="colour"> </td>
-  					<td width="20" height="20" valign="top" bgcolor="#FF0000" id="colour"> </td>
-    				<td width="15%" height="20" valign="top"> Remote</td>
-    				<td width="15%" height="20" valign="top"> When</td>
-    				<td width="15%" height="20" valign="top"> Offset</td>
-    				<td width="15%" height="20" valign="top"> Jitter</td>
-    				<td width="15%" height="20" valign="top"> Comment</td>
-  				</tr>
-    		</table>
-    	</div>
-        
-    	<div id="mainContent">
-    		<%
-    		for(Site site: list) {
-    		%>
-    		<table width="80%" border="0" cellspacing="0" cellpadding="0" class="center">                
-  				<tr>
-  					<%
-  					
-					if(site.getLastRecording().reach != 45){
-					%>
-						<td width="20" height="20" valign="top" bgcolor="#FF0000" id="colour"> </td>
-					<%
-  					}else{
-  					%>
-  						<td width="20" height="20" valign="top" bgcolor="#00CC00" id="colour"> </td>
-  					<%
-  					}
-  					%>
-  					<td width="20" height="20" valign="top"> </td>
-    				<td width="15%" height="20" valign="top"><%= site.location %></td>
-    				<%
-					if(site.getLastRecording().reach != 45){
-					%>
-					<td width="15%" height="20" valign="top"> - </td>
-					<%
-  					}else{
-  					%>
-    				<td width="15%" height="20" valign="top"><%= site.getLastRecording().timestamp %></td>
-    				<%
-  					}
-  					%>
-    				<td width="15%" height="20" valign="top"><%= site.getLastRecording().offset %></td>
-    				<td width="15%" height="20" valign="top"><%= site.getLastRecording().jitter %></td>
-    				<td width="15%" height="20" valign="top"><%= site.getLastRecording().lastUpdate %></td>
-  				</tr>
-    		</table>
-            
-            <%
-            }
-            %>
-        </div>
+    <table class="table" style="width: auto;" align="center">
+    <thead>
+        <tr>
+            <th>Remote</th>
+            <th>When</th>
+            <th>Offset</th>
+            <th>Jitter</th>
+            <th>Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+    <%= for(Site site:list){ 
+    System.out.println("Hei");%>
+        <tr class="active">
+            <td>1</td>
+            <td>Credit Card</td>
+            <td>04/07/2014</td>
+            <td>Call in to confirm</td>
+            <td>Dette ses på som test</td>
+        </tr>
+        <tr class="success">
+            <td>2</td>
+            <td>Water</td>
+            <td>01/07/2014</td>
+            <td>Paid</td>
+            <td>Dette ses på som test</td>
+        </tr>
+        <tr class="info">
+            <td>3</td>
+            <td>Internet</td>
+            <td>05/07/2014</td>
+            <td>Change plan</td>
+            <td>Dette ses på som test</td>
+        </tr>
+        <tr class="warning">
+            <td>4</td>
+            <td>Electricity</td>
+            <td>03/07/2014</td>
+            <td>Pending</td>
+            <td>Dette ses på som test</td>
+        </tr>
+        <tr class="danger">
+            <td>5</td>
+            <td>Telephone</td>
+            <td>06/07/2014</td>
+            <td>Due</td>
+            <td>Dette ses på som test</td>
+        </tr>
+    </tbody>
+</table>
+    <% } %>
         <div id="footer">
-        	<p>Hover over the header to reveal further information</p>
+        	
         </div>
-    </div>
 </body>
 </html>
