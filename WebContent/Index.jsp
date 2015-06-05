@@ -23,50 +23,31 @@
             <th>When</th>
             <th>Offset</th>
             <th>Jitter</th>
-            <th>Comment</th>
+            <th>Last Update</th>
         </tr>
     </thead>
     <tbody>
-    <%= for(Site site:list){ 
-    System.out.println("Hei");%>
-        <tr class="active">
-            <td>1</td>
-            <td>Credit Card</td>
-            <td>04/07/2014</td>
-            <td>Call in to confirm</td>
-            <td>Dette ses på som test</td>
-        </tr>
-        <tr class="success">
-            <td>2</td>
-            <td>Water</td>
-            <td>01/07/2014</td>
-            <td>Paid</td>
-            <td>Dette ses på som test</td>
-        </tr>
-        <tr class="info">
-            <td>3</td>
-            <td>Internet</td>
-            <td>05/07/2014</td>
-            <td>Change plan</td>
-            <td>Dette ses på som test</td>
-        </tr>
-        <tr class="warning">
-            <td>4</td>
-            <td>Electricity</td>
-            <td>03/07/2014</td>
-            <td>Pending</td>
-            <td>Dette ses på som test</td>
-        </tr>
+    <%= //for(Site site:list){ %>
+        <%if(site.getLastRecording().reach!= 45){ %>
         <tr class="danger">
-            <td>5</td>
-            <td>Telephone</td>
-            <td>06/07/2014</td>
-            <td>Due</td>
-            <td>Dette ses på som test</td>
+            <td><%= site.location %></td>
+            <td><%= site.getLastRecording().timestamp %></td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
         </tr>
+        <%} else{ %>
+        <tr class="success">
+            <td><%= site.location %></td>
+            <td><%= site.getLastRecording().timestamp %></td>
+            <td><%= site.getLastRecording().offset %></td>
+            <td><%= site.getLastRecording().jitter %></td>
+            <td><%= site.getLastRecording().lastUpdate %></td>
+        </tr>
+		<% } %>
     </tbody>
 </table>
-    <% } %>
+    
         <div id="footer">
         	
         </div>
